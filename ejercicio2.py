@@ -6,24 +6,26 @@ def check_db(filename):
 
 db_file = 'database.db'
 schema_file = 'schema.sql'
+insert_file = 'insert_images.sql'
 
 if check_db(db_file):
-    print('Database already exists. Exiting...')
-    exit(0)
+    print('Database already exists.')
+else:
+    print('Database does not exists.')
 
 with open(schema_file, 'r') as rf:
-    schema = rf.read
+    schema = rf.read()
+
+print(schema)
+
+with open(insert_file, 'r') as cursor:
+    insert = cursor.read()
+
 
 with sqlite3.connect(db_file) as conn:
     print('Created connection')
-    conn.executescript(schema.sql)
+    conn.executescript(schema)
     print('Created the Table! Now inserting')
-    conn.executescript("""
-                       insert into images (name, size, date)
-                       values
-                       ('sample.png', 100, '2019-10-10'),
-                       ('ask_python.png', 450, '2019-05-02'),
-                       ('class_room.jpeg', 1200, '2018-04-07'),
-                       """)
+    conn.executescript(insert)
     print('Inserted values into the table!')
 print('Closed the connection!')
